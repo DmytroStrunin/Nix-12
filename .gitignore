@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/eclipse,intellij,maven,gradle
 
+### log ###
+.logs
+
 ### Eclipse ###
 *.pydevproject
 .metadata
@@ -83,6 +86,9 @@ local.properties
 
 # IntelliJ
 /out/
+
+### log ###
+.logs/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
