@@ -29,7 +29,7 @@ public class Bus extends Vehicle {
                 .add(price.toString())
                 .add(model)
                 .add(manufacturer.toString())
-                .add(Integer.valueOf(numberOfPassengers).toString())
+                .add(String.valueOf(numberOfPassengers))
                 .toString();
     }
 }

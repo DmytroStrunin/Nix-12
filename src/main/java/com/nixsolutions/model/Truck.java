@@ -29,7 +29,7 @@ public class Truck extends Vehicle {
                 .add(price.toString())
                 .add(model)
                 .add(manufacturer.toString())
-                .add(Integer.valueOf(transportedWeight).toString())
+                .add(String.valueOf(transportedWeight))
                 .toString();
     }
 }
