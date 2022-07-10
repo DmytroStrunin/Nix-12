@@ -4,14 +4,12 @@ import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Bus;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
-import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.service.AutoService;
 import com.nixsolutions.service.BusService;
 import com.nixsolutions.service.TruckService;
 import com.nixsolutions.service.VehicleService;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
