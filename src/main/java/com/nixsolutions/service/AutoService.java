@@ -2,6 +2,7 @@ package com.nixsolutions.service;
 
 import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Body;
+import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.repository.AutoRepository;
 import com.nixsolutions.repository.CrudRepository;
 import org.slf4j.Logger;
@@ -10,13 +11,15 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
-public class AutoService implements VehicleService<Auto> {
+public class AutoService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoService.class);
     private static final CrudRepository<Auto> REPOSITORY = new AutoRepository();
+    private static final Random RANDOM = new Random();
 
-    @Override
+
     public List<Auto> create(int count) {
         List<Auto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
@@ -38,19 +41,16 @@ public class AutoService implements VehicleService<Auto> {
         return values[index];
     }
 
-    @Override
     public void save(List<Auto> autos) {
         REPOSITORY.create(autos);
     }
 
-    @Override
     public void printAll() {
         for (Object object : REPOSITORY.getAll()) {
             System.out.println(object);
         }
     }
 
-    @Override
     public boolean update(Auto auto) {
         if (REPOSITORY.getById(auto.getId()) != null) {
             LOGGER.debug("Update auto {}", auto.getId());
@@ -58,12 +58,17 @@ public class AutoService implements VehicleService<Auto> {
         return REPOSITORY.update(auto);
     }
 
-    @Override
     public boolean delete(String id) {
         if (REPOSITORY.delete(id)) {
             LOGGER.debug("Remove auto {}", id);
             return true;
         }
         return false;
+    }
+
+    Manufacturer getRandomManufacturer() {
+        final Manufacturer[] values = Manufacturer.values();
+        final int index = RANDOM.nextInt(values.length);
+        return values[index];
     }
 }

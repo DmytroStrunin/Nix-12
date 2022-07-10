@@ -7,7 +7,7 @@ import com.nixsolutions.model.Truck;
 import com.nixsolutions.service.AutoService;
 import com.nixsolutions.service.BusService;
 import com.nixsolutions.service.TruckService;
-import com.nixsolutions.service.VehicleService;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,9 +19,9 @@ import java.util.List;
  * @version 1.0
  */
 public class Main {
-    private static final VehicleService<Auto> AUTO_SERVICE = new AutoService();
-    private static final VehicleService<Bus> BUS_SERVICE = new BusService();
-    private static final VehicleService<Truck> TRUCK_SERVICE = new TruckService();
+    private static final AutoService AUTO_SERVICE = new AutoService();
+    private static final BusService BUS_SERVICE = new BusService();
+    private static final TruckService TRUCK_SERVICE = new TruckService();
 
     public static void main(String[] args) {
         final List<Auto> autos = AUTO_SERVICE.create(2);
@@ -49,8 +49,8 @@ public class Main {
         TRUCK_SERVICE.printAll();
 
         System.out.println("****Delete****");
-        String truckid = trucks.get(0).getId();
-        TRUCK_SERVICE.delete(truckid);
+        String truckId = trucks.get(0).getId();
+        TRUCK_SERVICE.delete(truckId);
         AUTO_SERVICE.printAll();
         BUS_SERVICE.printAll();
         TRUCK_SERVICE.printAll();

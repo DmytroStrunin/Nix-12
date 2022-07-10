@@ -1,5 +1,6 @@
 package com.nixsolutions.service;
 
+import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
 import com.nixsolutions.repository.CrudRepository;
 import com.nixsolutions.repository.TruckRepository;
@@ -9,13 +10,14 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
-public class TruckService implements VehicleService<Truck> {
+public class TruckService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TruckService.class);
     private static final CrudRepository<Truck> REPOSITORY = new TruckRepository();
+    private static final Random RANDOM = new Random();
 
-    @Override
     public List<Truck> create(int count) {
         List<Truck> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
@@ -35,19 +37,16 @@ public class TruckService implements VehicleService<Truck> {
         return RANDOM.nextInt(100, 200);
     }
 
-    @Override
     public void save(List<Truck> trucks) {
         REPOSITORY.create(trucks);
     }
 
-    @Override
     public void printAll() {
         for (Object object : REPOSITORY.getAll()) {
             System.out.println(object);
         }
     }
 
-    @Override
     public boolean update(Truck truck) {
         if (REPOSITORY.getById(truck.getId()) != null) {
             LOGGER.debug("Update auto {}", truck.getId());
@@ -55,7 +54,6 @@ public class TruckService implements VehicleService<Truck> {
         return REPOSITORY.update(truck);
     }
 
-    @Override
     public boolean delete(String id) {
         if (REPOSITORY.delete(id)) {
             LOGGER.debug("Remove truck {}", id);
@@ -63,4 +61,11 @@ public class TruckService implements VehicleService<Truck> {
         }
         return false;
     }
+
+    Manufacturer getRandomManufacturer() {
+        final Manufacturer[] values = Manufacturer.values();
+        final int index = RANDOM.nextInt(values.length);
+        return values[index];
+    }
 }
+
