@@ -15,8 +15,12 @@ import java.util.Random;
 public class BusService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BusService.class);
-    private static final CrudRepository<Bus> REPOSITORY = new BusRepository();
+    private final CrudRepository<Bus> busRepository;
     private static final Random RANDOM = new Random();
+
+    public BusService(BusRepository busRepository){
+        this.busRepository=busRepository;
+    }
 
     public List<Bus> create(int count) {
         List<Bus> result = new LinkedList<>();
@@ -38,24 +42,24 @@ public class BusService {
     }
 
     public void save(List<Bus> buses) {
-        REPOSITORY.create(buses);
+        busRepository.saveAll(buses);
     }
 
     public void printAll() {
-        for (Object object : REPOSITORY.getAll()) {
+        for (Object object : busRepository.getAll()) {
             System.out.println(object);
         }
     }
 
     public boolean update(Bus bus) {
-        if (REPOSITORY.getById(bus.getId()) != null) {
+        if (busRepository.getById(bus.getId()) != null) {
             LOGGER.debug("Update auto {}", bus.getId());
         }
-        return REPOSITORY.update(bus);
+        return busRepository.update(bus);
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.delete(id)) {
+        if (busRepository.delete(id)) {
             LOGGER.debug("Remove bus {}", id);
             return true;
         }

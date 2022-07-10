@@ -2,7 +2,9 @@ package com.nixsolutions.repository;
 
 
 import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.Body;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,13 +32,22 @@ public class AutoRepository implements CrudRepository<Auto> {
     }
 
     @Override
-    public boolean create(Auto auto) {
+    public boolean save(Auto auto) {
+        if (auto == null) {
+            throw new IllegalArgumentException("Auto must not be null");
+        }
+        if (auto.getPrice().equals(BigDecimal.ZERO)) {
+            auto.setPrice(BigDecimal.valueOf(-1));
+        }
         autos.add(auto);
         return true;
     }
 
     @Override
-    public boolean create(List<Auto> auto) {
+    public boolean saveAll(List<Auto> auto) {
+        if (auto == null) {
+            return false;
+        }
         return autos.addAll(auto);
     }
 
@@ -61,6 +72,15 @@ public class AutoRepository implements CrudRepository<Auto> {
             }
         }
         return false;
+    }
+
+    public boolean updateByBodyType(Body bodyType, Auto copyFrom) {
+        for (Auto auto : autos) {
+            if (auto.getBodyType().equals(bodyType)) {
+                copy(copyFrom, auto);
+            }
+        }
+        return true;
     }
 
     @Override

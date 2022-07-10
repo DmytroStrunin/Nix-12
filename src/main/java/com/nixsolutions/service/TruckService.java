@@ -15,8 +15,12 @@ import java.util.Random;
 public class TruckService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TruckService.class);
-    private static final CrudRepository<Truck> REPOSITORY = new TruckRepository();
+    private final CrudRepository<Truck> truckRepository;
     private static final Random RANDOM = new Random();
+
+    public TruckService(TruckRepository truckRepository){
+        this.truckRepository=truckRepository;
+    }
 
     public List<Truck> create(int count) {
         List<Truck> result = new LinkedList<>();
@@ -38,24 +42,24 @@ public class TruckService {
     }
 
     public void save(List<Truck> trucks) {
-        REPOSITORY.create(trucks);
+        truckRepository.saveAll(trucks);
     }
 
     public void printAll() {
-        for (Object object : REPOSITORY.getAll()) {
+        for (Object object : truckRepository.getAll()) {
             System.out.println(object);
         }
     }
 
     public boolean update(Truck truck) {
-        if (REPOSITORY.getById(truck.getId()) != null) {
+        if (truckRepository.getById(truck.getId()) != null) {
             LOGGER.debug("Update auto {}", truck.getId());
         }
-        return REPOSITORY.update(truck);
+        return truckRepository.update(truck);
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.delete(id)) {
+        if (truckRepository.delete(id)) {
             LOGGER.debug("Remove truck {}", id);
             return true;
         }

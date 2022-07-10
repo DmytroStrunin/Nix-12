@@ -14,13 +14,15 @@ import java.util.List;
 import java.util.Random;
 
 public class AutoService {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoService.class);
-    private static final CrudRepository<Auto> REPOSITORY = new AutoRepository();
     private static final Random RANDOM = new Random();
+    private final AutoRepository autoRepository;
 
+    public AutoService(AutoRepository autoRepository) {
+        this.autoRepository = autoRepository;
+    }
 
-    public List<Auto> create(int count) {
+    public List<Auto> createAndSaveAutos(int count) {
         List<Auto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final Auto auto = new Auto(
@@ -28,11 +30,37 @@ public class AutoService {
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
                     getRandomBody()
+
             );
             result.add(auto);
+            autoRepository.save(auto);
             LOGGER.debug("Created auto {}", auto.getId());
         }
         return result;
+    }
+
+    private Manufacturer getRandomManufacturer() {
+        final Manufacturer[] values = Manufacturer.values();
+        final int index = RANDOM.nextInt(values.length);
+        return values[index];
+    }
+
+    public void saveAutos(List<Auto> autos) {
+        autoRepository.saveAll(autos);
+    }
+
+    public void printAll() {
+        for (Auto auto : autoRepository.getAll()) {
+            System.out.println(auto);
+        }
+    }
+
+    public Auto findOneById(String id) {
+        if (id == null) {
+            return autoRepository.getById("");
+        } else {
+            return autoRepository.getById(id);
+        }
     }
 
     private Body getRandomBody() {
@@ -41,34 +69,19 @@ public class AutoService {
         return values[index];
     }
 
-    public void save(List<Auto> autos) {
-        REPOSITORY.create(autos);
-    }
-
-    public void printAll() {
-        for (Object object : REPOSITORY.getAll()) {
-            System.out.println(object);
-        }
-    }
-
     public boolean update(Auto auto) {
-        if (REPOSITORY.getById(auto.getId()) != null) {
+        if (autoRepository.getById(auto.getId()) != null) {
             LOGGER.debug("Update auto {}", auto.getId());
         }
-        return REPOSITORY.update(auto);
+        return autoRepository.update(auto);
     }
 
     public boolean delete(String id) {
-        if (REPOSITORY.delete(id)) {
+        if (autoRepository.delete(id)) {
             LOGGER.debug("Remove auto {}", id);
             return true;
         }
         return false;
     }
 
-    Manufacturer getRandomManufacturer() {
-        final Manufacturer[] values = Manufacturer.values();
-        final int index = RANDOM.nextInt(values.length);
-        return values[index];
-    }
 }

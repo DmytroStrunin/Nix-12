@@ -32,12 +32,12 @@ public class BusRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean create(Bus bus) {
+    public boolean save(Bus bus) {
         return buses.add(bus);
     }
 
     @Override
-    public boolean create(List<Bus> bus) {
+    public boolean saveAll(List<Bus> bus) {
         return buses.addAll(bus);
     }
 

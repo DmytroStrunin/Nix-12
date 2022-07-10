@@ -32,12 +32,12 @@ public class TruckRepository implements CrudRepository<Truck> {
     }
 
     @Override
-    public boolean create(Truck truck) {
+    public boolean save(Truck truck) {
         return trucks.add(truck);
     }
 
     @Override
-    public boolean create(List<Truck> truck) {
+    public boolean saveAll(List<Truck> truck) {
         return trucks.addAll(truck);
     }
 
