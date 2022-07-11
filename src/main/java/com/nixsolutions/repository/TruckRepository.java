@@ -37,8 +37,8 @@ public class TruckRepository implements CrudRepository<Truck> {
     }
 
     @Override
-    public boolean saveAll(List<Truck> truck) {
-        return trucks.addAll(truck);
+    public boolean saveAll(List<Truck> trucks) {
+        return this.trucks.addAll(trucks);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.nixsolutions.model.Bus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code BusRepository} class
@@ -37,8 +38,9 @@ public class BusRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean saveAll(List<Bus> bus) {
-        return buses.addAll(bus);
+    public boolean saveAll(List<Bus> buses) {
+        Optional.ofNullable(buses).orElseThrow(IllegalArgumentException::new);
+        return this.buses.addAll(buses);
     }
 
     @Override
