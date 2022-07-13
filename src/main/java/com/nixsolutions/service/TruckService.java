@@ -4,6 +4,7 @@ import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
 import com.nixsolutions.repository.CrudRepository;
 import com.nixsolutions.repository.TruckRepository;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,7 @@ public class TruckService {
                     "Model-" + RANDOM.nextInt(1000),
                     getRandomManufacturer(),
                     BigDecimal.valueOf(RANDOM.nextDouble(1000.0)),
-                    getRandomNumberOfPassengers()
+                    getRandomTransportedWeight()
             );
             result.add(truck);
             LOGGER.debug("Created truck {}", truck.getId());
@@ -37,7 +38,7 @@ public class TruckService {
         return result;
     }
 
-    private int getRandomNumberOfPassengers() {
+    protected int getRandomTransportedWeight() {
         return RANDOM.nextInt(100, 200);
     }
 
@@ -51,10 +52,8 @@ public class TruckService {
         }
     }
 
-    public boolean update(Truck truck) {
-        if (truckRepository.getById(truck.getId()) != null) {
-            LOGGER.debug("Update auto {}", truck.getId());
-        }
+    public boolean update(@NonNull Truck truck) {
+        LOGGER.debug("Update auto {}", truck.getId());
         return truckRepository.update(truck);
     }
 
@@ -66,10 +65,9 @@ public class TruckService {
         return false;
     }
 
-    Manufacturer getRandomManufacturer() {
+    protected Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
 }
-

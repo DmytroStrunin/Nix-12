@@ -1,6 +1,5 @@
 package com.nixsolutions.repository;
 
-import com.nixsolutions.model.Truck;
 import com.nixsolutions.model.Vehicle;
 
 import java.util.List;

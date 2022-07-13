@@ -1,21 +1,20 @@
 package com.nixsolutions.service;
 
 import com.nixsolutions.model.Bus;
+import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.repository.BusRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.MockedConstruction;
-import org.mockito.Mockito;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.mockConstruction;
-
+import static org.mockito.Mockito.*;
 
 class BusServiceTest {
 
@@ -24,7 +23,7 @@ class BusServiceTest {
 
     @BeforeEach
     void setUp() {
-        busRepository = Mockito.mock(BusRepository.class);
+        busRepository = mock(BusRepository.class);
         target = new BusService(busRepository);
     }
 
@@ -35,51 +34,77 @@ class BusServiceTest {
     }
 
     @Test
-    void save_mockito_verifyTimes() {
-        List<Bus> buses = new LinkedList<>();
-        target.save(buses);
-        Mockito.verify(busRepository, Mockito.times(1)).saveAll(Mockito.any());
+    void getRandomNumberOfPassengers_shouldBeReturnNormalValue() {
+        int randomNumber = target.getRandomNumberOfPassengers();
+        assertTrue(randomNumber >= 20 && randomNumber <= 30);
     }
 
     @Test
-    void save_mockito_throwingException() {
-        Mockito.when(busRepository.saveAll(Mockito.any())).thenThrow(new IllegalArgumentException());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.save(Mockito.any()));
+    void save_mockitoThrowingException() {
+        when(busRepository.saveAll(any()))
+                .thenThrow(new IllegalArgumentException());
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> target.save(any()));
     }
 
     @Test
     void save_throwingException() {
-        Mockito.when(busRepository.saveAll(null)).thenCallRealMethod();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> target.save(null));
+        when(busRepository.saveAll(null)).thenCallRealMethod();
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> target.save(null));
     }
 
     @Test
-    void printAll_mockito_verify() {
+    void save_mockitoVerifyTimes() {
+        List<Bus> buses = new LinkedList<>();
+        target.save(buses);
+        verify(busRepository, times(1)).saveAll(any());
+    }
+
+    @Test
+    void printAll_mockitoVerify() {
         target.printAll();
-        Mockito.verify(busRepository).getAll();
+        verify(busRepository).getAll();
     }
 
     @Test
-    void update_mockito_callMockMethod() {
-        Mockito.when(busRepository.update(Mockito.any())).thenReturn(true);
-        Bus busMock = Mockito.mock(Bus.class);
+    void update_mockitoCallMockMethod() {
+        when(busRepository.update(any())).thenReturn(true);
+        Bus busMock = mock(Bus.class);
         assertTrue(target.update(busMock));
     }
 
     @Test
-    void delete_mockito_callRealMethod() {
+    void update_mockitoArgumentCaptor() {
+        ArgumentCaptor<Bus> captor = ArgumentCaptor.forClass(Bus.class);
+        target.update(new Bus("model", null, null, 0));
+        verify(busRepository).update(captor.capture());
+        Assertions.assertEquals("model", captor.getValue().getModel());
+    }
+
+    @Test
+    void delete_mockitoCallRealMethod() {
         try (MockedConstruction<BusRepository> busRepositoryMockedConstruction =
                      mockConstruction(BusRepository.class,
                              (mock, context) ->
                                      doCallRealMethod()
                                              .when(mock).delete(anyString()))) {
-            assertFalse(target.delete(Mockito.any()));
+            assertFalse(target.delete(any()));
         } catch (Throwable e) {
             fail();
         }
     }
 
     @Test
-    void getRandomManufacturer() {
+    void delete_mockitoCustomArgumentMatcher() {
+        when(busRepository.delete(argThat(a -> a.equals("id"))))
+                .thenReturn(true);
+        assertTrue(target.delete("id"));
+    }
+
+    @Test
+    void getRandomManufacturer_mustBeReturnManufacturer() {
+        target.getRandomManufacturer();
+        assertEquals(Manufacturer.class, target.getRandomManufacturer().getClass());
     }
 }

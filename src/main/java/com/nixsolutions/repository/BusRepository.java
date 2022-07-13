@@ -34,6 +34,9 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean save(Bus bus) {
+        if (buses.contains(bus)) {
+            return false;
+        }
         return buses.add(bus);
     }
 
@@ -60,9 +63,11 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public void copy(final Bus from, final Bus to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setNumberOfPassengers(from.getNumberOfPassengers());
-        to.setPrice(from.getPrice());
+        if (from != null && to != null) {
+            to.setManufacturer(from.getManufacturer());
+            to.setModel(from.getModel());
+            to.setNumberOfPassengers(from.getNumberOfPassengers());
+            to.setPrice(from.getPrice());
+        }
     }
 }

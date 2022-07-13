@@ -4,13 +4,13 @@ import com.nixsolutions.model.Bus;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.repository.BusRepository;
 import com.nixsolutions.repository.CrudRepository;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class BusService {
@@ -19,8 +19,8 @@ public class BusService {
     private final CrudRepository<Bus> busRepository;
     private static final Random RANDOM = new Random();
 
-    public BusService(BusRepository busRepository){
-        this.busRepository=busRepository;
+    public BusService(BusRepository busRepository) {
+        this.busRepository = busRepository;
     }
 
     public List<Bus> create(int count) {
@@ -38,7 +38,7 @@ public class BusService {
         return result;
     }
 
-    private int getRandomNumberOfPassengers() {
+    protected int getRandomNumberOfPassengers() {
         return RANDOM.nextInt(20, 30);
     }
 
@@ -52,10 +52,8 @@ public class BusService {
         }
     }
 
-    public boolean update(Bus bus) {
-        if (busRepository.getById(bus.getId()) != null) {
-            LOGGER.debug("Update auto {}", bus.getId());
-        }
+    public boolean update(@NonNull Bus bus) {
+        LOGGER.debug("Update auto {}", bus.getId());
         return busRepository.update(bus);
     }
 
@@ -67,7 +65,7 @@ public class BusService {
         return false;
     }
 
-    Manufacturer getRandomManufacturer() {
+    protected Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
