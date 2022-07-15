@@ -20,11 +20,10 @@ public class BusRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public Bus getById(String id) {
+    public Optional<Bus> findById(String id) {
         return buses.stream()
                 .filter(bus -> bus.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
@@ -34,9 +33,11 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean save(Bus bus) {
-        if (buses.contains(bus)) {
-            return false;
+        Optional<Bus> bus1 = Optional.ofNullable(bus).orElseGet(());
+        if (bus1.isPresent()){
+            bus1.filter(vehicle-> findById(vehicle.getId()).isEmpty()).ifPresent(buses::add);
         }
+
         return buses.add(bus);
     }
 
@@ -48,17 +49,14 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean update(Bus bus) {
-        final Bus founded = getById(bus.getId());
-        if (founded != null) {
-            copy(bus, founded);
-            return true;
-        }
-        return false;
+        final Bus founded = findById(bus.getId()).orElseThrow();
+        copy(bus, founded);
+        return true;
     }
 
     @Override
     public boolean delete(String id) {
-        return buses.remove(getById(id));
+        return buses.remove(findById(id));
     }
 
     @Override

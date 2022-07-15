@@ -23,7 +23,7 @@ class BusRepositoryTest {
 
     @Test
     void getById_mustBeReturnBusWithId() {
-        assertEquals(bus, target.getById(bus.getId()));
+        assertEquals(bus, target.findById(bus.getId()));
     }
 
     @Test

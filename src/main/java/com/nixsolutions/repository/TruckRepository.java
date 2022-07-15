@@ -1,5 +1,6 @@
 package com.nixsolutions.repository;
 
+import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Truck;
 
 import java.util.LinkedList;
@@ -20,11 +21,10 @@ public class TruckRepository implements CrudRepository<Truck> {
     }
 
     @Override
-    public Truck getById(String id) {
+    public Optional<Truck> findById(String id) {
         return trucks.stream()
                 .filter(truck -> truck.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
@@ -48,17 +48,14 @@ public class TruckRepository implements CrudRepository<Truck> {
 
     @Override
     public boolean update(Truck truck) {
-        final Truck founded = getById(truck.getId());
-        if (founded != null) {
-            copy(truck, founded);
-            return true;
-        }
+        final Truck founded = findById(truck.getId()).orElseThrow();
+        copy(truck, founded);
         return false;
     }
 
     @Override
     public boolean delete(String id) {
-        return trucks.remove(getById(id));
+        return trucks.remove(findById(id));
     }
 
     @Override

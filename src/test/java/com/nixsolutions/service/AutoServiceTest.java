@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 class AutoServiceTest {
 
@@ -50,28 +51,29 @@ class AutoServiceTest {
 
     @Test
     void printAll() {
-        List<Auto> autos = List.of(createSimpleAuto(), createSimpleAuto());
+        List<Auto> autos = List.of(createSimpleAuto().get(), createSimpleAuto().get());
         Mockito.when(autoRepository.getAll()).thenReturn(autos);
         target.printAll();
     }
 
-    private Auto createSimpleAuto() {
-        return new Auto("Model", Manufacturer.BMW, BigDecimal.ZERO, Body.COUPE);
+    private Optional<Auto> createSimpleAuto() {
+
+        return Optional.of(new Auto("Model", Manufacturer.BMW, BigDecimal.ZERO, Body.COUPE));
     }
 
     @Test
     void findOneById_null1() {
-        final Auto expected = createSimpleAuto();
-        Mockito.when(autoRepository.getById("")).thenReturn(expected);
-        final Auto actual = target.findOneById(null);
-        Assertions.assertEquals(expected.getId(), actual.getId());
+        final Optional<Auto> expected = createSimpleAuto();
+        Mockito.when(autoRepository.findById("")).thenReturn(expected);
+        final Optional<Auto> actual = target.findOneById(null);
+        Assertions.assertEquals(expected.get().getId(), actual.get().getId());
     }
 
     @Test
     void findOneById_null2() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         target.findOneById(null);
-        Mockito.verify(autoRepository).getById(captor.capture());
+        Mockito.verify(autoRepository).findById(captor.capture());
         Assertions.assertEquals("", captor.getValue());
     }
 

@@ -1,12 +1,14 @@
 package com.nixsolutions.repository;
 
+import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Vehicle;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CrudRepository<T extends Vehicle> {
 
-    T getById(String id);
+    Optional<T> findById(String id);
 
     List<T> getAll();
 

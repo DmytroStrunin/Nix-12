@@ -26,7 +26,7 @@ class TruckRepositoryTest {
 
     @Test
     void getById_mustBeReturnNullWhenRepositoryDontContains() {
-        assertNull(target.getById("none id"));
+        assertNull(target.findById("none id"));
     }
 
     @Test
