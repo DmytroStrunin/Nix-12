@@ -21,6 +21,7 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public Optional<Bus> findById(String id) {
+        Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
         return buses.stream()
                 .filter(bus -> bus.getId().equals(id))
                 .findFirst();
@@ -33,6 +34,7 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean save(Bus bus) {
+        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
         Optional<Bus> bus1 = Optional.ofNullable(bus).orElseGet(());
         if (bus1.isPresent()){
             bus1.filter(vehicle-> findById(vehicle.getId()).isEmpty()).ifPresent(buses::add);
@@ -41,22 +43,37 @@ public class BusRepository implements CrudRepository<Bus> {
         return buses.add(bus);
     }
 
+    public boolean save1(Bus bus) {
+        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
+        if (findById(bus.getId()).isPresent()){
+            return false;
+        }
+        return buses.add(bus);
+    }
+
     @Override
     public boolean saveAll(List<Bus> buses) {
-        Optional.ofNullable(buses).orElseThrow(IllegalArgumentException::new);
+        Optional.ofNullable(buses).orElseThrow(()-> new IllegalArgumentException("buses is null"));
         return this.buses.addAll(buses);
     }
 
     @Override
     public boolean update(Bus bus) {
-        final Bus founded = findById(bus.getId()).orElseThrow();
-        copy(bus, founded);
-        return true;
+        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
+        final Optional<Bus> founded = findById(bus.getId());
+        if (founded.isPresent()){
+            copy(bus, founded.get());
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean delete(String id) {
-        return buses.remove(findById(id));
+        if (findById(id).isPresent()) {
+            return buses.remove(findById(id).get());
+        }
+        return false;
     }
 
     @Override
