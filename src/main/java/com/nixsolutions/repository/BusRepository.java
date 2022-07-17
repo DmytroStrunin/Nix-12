@@ -19,12 +19,13 @@ public class BusRepository implements CrudRepository<Bus> {
         buses = new LinkedList<>();
     }
 
+    //filter
     @Override
-    public Bus getById(String id) {
+    public Optional<Bus> findById(String id) {
+        Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
         return buses.stream()
                 .filter(bus -> bus.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override
@@ -32,25 +33,33 @@ public class BusRepository implements CrudRepository<Bus> {
         return buses;
     }
 
+    //ifPresent
+    //orElseThrow
     @Override
     public boolean save(Bus bus) {
-        if (buses.contains(bus)) {
-            return false;
+        Optional<Bus> optionalBus = Optional.ofNullable(bus);
+        if (findById(optionalBus.orElseThrow().getId()).isEmpty()){
+            optionalBus.filter(vehicle-> findById(vehicle.getId()).isEmpty())
+                    .ifPresent(buses::add);
+            return true;
         }
-        return buses.add(bus);
+        return false;
     }
 
+    //orElseThrow
     @Override
     public boolean saveAll(List<Bus> buses) {
-        Optional.ofNullable(buses).orElseThrow(IllegalArgumentException::new);
+        Optional.ofNullable(buses).orElseThrow(()-> new IllegalArgumentException("buses is null"));
         return this.buses.addAll(buses);
     }
 
+    //orElseThrow
     @Override
     public boolean update(Bus bus) {
-        final Bus founded = getById(bus.getId());
-        if (founded != null) {
-            copy(bus, founded);
+        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
+        final Optional<Bus> founded = findById(bus.getId());
+        if (founded.isPresent()){
+            copy(bus, founded.get());
             return true;
         }
         return false;
@@ -58,16 +67,21 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public boolean delete(String id) {
-        return buses.remove(getById(id));
+        if (findById(id).isPresent()) {
+            return buses.remove(findById(id).get());
+        }
+        return false;
     }
 
+    //ifPresentOrElse
     @Override
     public void copy(final Bus from, final Bus to) {
-        if (from != null && to != null) {
-            to.setManufacturer(from.getManufacturer());
-            to.setModel(from.getModel());
-            to.setNumberOfPassengers(from.getNumberOfPassengers());
-            to.setPrice(from.getPrice());
-        }
+        Bus busTo = Optional.ofNullable(to).orElseThrow(()-> new IllegalArgumentException("argument bus to is null"));
+        Optional.ofNullable(from).ifPresentOrElse(busFrom -> {
+            busTo.setManufacturer(busFrom.getManufacturer());
+            busTo.setModel(busFrom.getModel());
+            busTo.setNumberOfPassengers(busFrom.getNumberOfPassengers());
+            busTo.setPrice(busFrom.getPrice());
+        },()-> {throw new IllegalArgumentException("argument bus from is null");});
     }
 }

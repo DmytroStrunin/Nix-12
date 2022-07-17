@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +26,8 @@ class TruckRepositoryTest {
     }
 
     @Test
-    void getById_mustBeReturnNullWhenRepositoryDontContains() {
-        assertNull(target.getById("none id"));
+    void findById_mustBeReturnNullWhenRepositoryDontContains() {
+        assertEquals(Optional.empty(), target.findById("none id"));
     }
 
     @Test
@@ -55,8 +56,12 @@ class TruckRepositoryTest {
     }
 
     @Test
-    void copy_dontChangeTruck() {
-        target.copy(truck, null);
-        assertNotNull(truck);
+    void copy_throwExceptionIfFirstArgumentNull() {
+        assertThrows(IllegalArgumentException.class, ()->target.copy(truck, null));
+    }
+
+    @Test
+    void copy_throwExceptionIfSecondArgumentNull() {
+        assertThrows(IllegalArgumentException.class, ()->target.copy(null, truck));
     }
 }

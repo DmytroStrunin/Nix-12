@@ -19,12 +19,13 @@ public class TruckRepository implements CrudRepository<Truck> {
         trucks = new LinkedList<>();
     }
 
+    //filter
     @Override
-    public Truck getById(String id) {
+    public Optional<Truck> findById(String id) {
+        Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
         return trucks.stream()
-                .filter(truck -> truck.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+                .filter(bus -> bus.getId().equals(id))
+                .findFirst();
     }
 
     @Override
@@ -32,25 +33,33 @@ public class TruckRepository implements CrudRepository<Truck> {
         return trucks;
     }
 
+    //ifPresent
+    //orElseThrow
     @Override
     public boolean save(Truck truck) {
-        if (trucks.contains(truck)) {
-            return false;
+        Optional<Truck> optionalBus = Optional.ofNullable(truck);
+        if (findById(optionalBus.orElseThrow().getId()).isEmpty()){
+            optionalBus.filter(vehicle-> findById(vehicle.getId()).isEmpty())
+                    .ifPresent(trucks::add);
+            return true;
         }
-        return trucks.add(truck);
+        return false;
     }
 
+    //orElseThrow
     @Override
     public boolean saveAll(List<Truck> trucks) {
-        Optional.ofNullable(trucks).orElseThrow(IllegalArgumentException::new);
+        Optional.ofNullable(trucks).orElseThrow(()-> new IllegalArgumentException("buses is null"));
         return this.trucks.addAll(trucks);
     }
 
+    //orElseThrow
     @Override
     public boolean update(Truck truck) {
-        final Truck founded = getById(truck.getId());
-        if (founded != null) {
-            copy(truck, founded);
+        Optional.ofNullable(truck).orElseThrow(()-> new IllegalArgumentException("bus is null"));
+        final Optional<Truck> founded = findById(truck.getId());
+        if (founded.isPresent()){
+            copy(truck, founded.get());
             return true;
         }
         return false;
@@ -58,16 +67,21 @@ public class TruckRepository implements CrudRepository<Truck> {
 
     @Override
     public boolean delete(String id) {
-        return trucks.remove(getById(id));
+        if (findById(id).isPresent()) {
+            return trucks.remove(findById(id).get());
+        }
+        return false;
     }
 
+    //ifPresentOrElse
     @Override
     public void copy(final Truck from, final Truck to) {
-        if (from != null && to != null) {
-            to.setManufacturer(from.getManufacturer());
-            to.setModel(from.getModel());
-            to.setTransportedWeight(from.getTransportedWeight());
-            to.setPrice(from.getPrice());
-        }
+        Truck truckTo = Optional.ofNullable(to).orElseThrow(()-> new IllegalArgumentException("argument truck to is null"));
+        Optional.ofNullable(from).ifPresentOrElse(truckFrom -> {
+            truckTo.setManufacturer(truckFrom.getManufacturer());
+            truckTo.setModel(truckFrom.getModel());
+            truckTo.setTransportedWeight(truckFrom.getTransportedWeight());
+            truckTo.setPrice(truckFrom.getPrice());
+        },()-> {throw new IllegalArgumentException("argument truck from is null");});
     }
 }
