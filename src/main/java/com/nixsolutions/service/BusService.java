@@ -13,6 +13,7 @@ public class BusService extends VehicleService<Bus> {
         super(repository);
     }
 
+    @Override
     public List<Bus> create(int count) {
         List<Bus> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
