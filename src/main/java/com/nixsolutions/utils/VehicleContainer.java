@@ -18,7 +18,7 @@ public class VehicleContainer<T extends Vehicle> {
 
     public VehicleContainer(T t) {
         Optional.ofNullable(t)
-                .filter(vehicle->Optional.ofNullable(vehicle.getPrice()).isPresent())
+                .map(Vehicle::getPrice)
                 .orElseThrow(IllegalArgumentException::new);
         this.t = t;
     }
