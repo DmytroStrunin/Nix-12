@@ -4,6 +4,7 @@ import com.nixsolutions.model.Bus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code BusRepository} class
@@ -32,13 +33,17 @@ public class BusRepository implements CrudRepository<Bus> {
     }
 
     @Override
-    public boolean create(Bus bus) {
+    public boolean save(Bus bus) {
+        if (buses.contains(bus)) {
+            return false;
+        }
         return buses.add(bus);
     }
 
     @Override
-    public boolean create(List<Bus> bus) {
-        return buses.addAll(bus);
+    public boolean saveAll(List<Bus> buses) {
+        Optional.ofNullable(buses).orElseThrow(IllegalArgumentException::new);
+        return this.buses.addAll(buses);
     }
 
     @Override
@@ -58,9 +63,11 @@ public class BusRepository implements CrudRepository<Bus> {
 
     @Override
     public void copy(final Bus from, final Bus to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setNumberOfPassengers(from.getNumberOfPassengers());
-        to.setPrice(from.getPrice());
+        if (from != null && to != null) {
+            to.setManufacturer(from.getManufacturer());
+            to.setModel(from.getModel());
+            to.setNumberOfPassengers(from.getNumberOfPassengers());
+            to.setPrice(from.getPrice());
+        }
     }
 }

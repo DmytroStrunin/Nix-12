@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -31,5 +32,18 @@ public class Bus extends Vehicle {
                 .add(manufacturer.toString())
                 .add(String.valueOf(numberOfPassengers))
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bus bus)) return false;
+        if (!super.equals(o)) return false;
+        return getNumberOfPassengers() == bus.getNumberOfPassengers();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getNumberOfPassengers());
     }
 }

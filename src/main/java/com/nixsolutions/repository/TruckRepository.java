@@ -4,6 +4,7 @@ import com.nixsolutions.model.Truck;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The {@code TruckRepository} class
@@ -32,13 +33,17 @@ public class TruckRepository implements CrudRepository<Truck> {
     }
 
     @Override
-    public boolean create(Truck truck) {
+    public boolean save(Truck truck) {
+        if (trucks.contains(truck)) {
+            return false;
+        }
         return trucks.add(truck);
     }
 
     @Override
-    public boolean create(List<Truck> truck) {
-        return trucks.addAll(truck);
+    public boolean saveAll(List<Truck> trucks) {
+        Optional.ofNullable(trucks).orElseThrow(IllegalArgumentException::new);
+        return this.trucks.addAll(trucks);
     }
 
     @Override
@@ -58,9 +63,11 @@ public class TruckRepository implements CrudRepository<Truck> {
 
     @Override
     public void copy(final Truck from, final Truck to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setTransportedWeight(from.getTransportedWeight());
-        to.setPrice(from.getPrice());
+        if (from != null && to != null) {
+            to.setManufacturer(from.getManufacturer());
+            to.setModel(from.getModel());
+            to.setTransportedWeight(from.getTransportedWeight());
+            to.setPrice(from.getPrice());
+        }
     }
 }
