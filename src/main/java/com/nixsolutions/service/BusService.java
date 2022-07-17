@@ -5,7 +5,6 @@ import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.repository.BusRepository;
 import com.nixsolutions.repository.CrudRepository;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,7 @@ public class BusService {
                     getRandomNumberOfPassengers()
             );
             result.add(bus);
-            LOGGER.debug("Created bus {}", bus.getId());
+            LOGGER.debug("Created vehicle {}", bus.getId());
         }
         return result;
     }
@@ -54,32 +53,39 @@ public class BusService {
         }
     }
 
+    //orElseThrow
     public boolean update(Bus bus) {
         Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("vehicle is null"));
-        LOGGER.debug("Update auto {}", bus.getId());
+        LOGGER.debug("Update vehicle {}", bus.getId());
         return busRepository.update(bus);
     }
 
+    //orElseThrow
     public boolean delete(String id) {
         Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
         if (busRepository.delete(id)) {
-            LOGGER.debug("Remove bus {}", id);
+            LOGGER.debug("Remove vehicle {}", id);
             return true;
         }
         return false;
     }
 
-    protected Manufacturer getRandomManufacturer() {
+    private Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
     }
 
+    //map
+    //or
     public String getModelValueById(String id) {
         return busRepository.findById(id)
                 .map(Vehicle::getModel)
                 .or(()-> Optional.of("NONE")).get();
     }
+
+    //map
+    //orElse
     public String getManufacturerValueById(String id) {
         return busRepository.findById(id)
                 .map(Vehicle::getManufacturer)
@@ -87,26 +93,21 @@ public class BusService {
                 .orElse("NONE");
     }
 
+    //map
+    //orElseGet
     public String getPriceValueById(String id) {
         return busRepository.findById(id)
                 .map(Vehicle::getPrice)
                 .map(String::valueOf)
                 .orElseGet(()->String.valueOf(new BigDecimal(-1)));
     }
-
-    public void compareCurrentIdWithModel(String id, String model) {
-        busRepository.findById(id)
-                .filter(vehicle->vehicle.getModel().equals(model))
-                .ifPresentOrElse(vehicle-> LOGGER.info("Vehicle Id with this model exists {}", vehicle),
-                        ()-> LOGGER.info("Vehicle Id with this model not exists {}", id));
-    }
 }
 
-//ifPresent
-//ifPresentOrElse +
-//orElse +
-//orElseGet +
-//map +
-//filter +
-//orElseThrow +
-//or +
+
+
+
+
+
+
+
+

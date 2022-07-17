@@ -7,24 +7,24 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockedConstruction;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class BusServiceTest {
 
     private BusService target;
     private BusRepository busRepository;
+    private Bus bus;
 
     @BeforeEach
     void setUp() {
         busRepository = mock(BusRepository.class);
         target = new BusService(busRepository);
+        bus = new Bus("model", Manufacturer.KIA,new BigDecimal(321),0);
     }
 
     @Test
@@ -56,8 +56,7 @@ class BusServiceTest {
 
     @Test
     void save_mockitoVerifyTimes() {
-        List<Bus> buses = new LinkedList<>();
-        target.save(buses);
+        target.save(any());
         verify(busRepository, times(1)).saveAll(any());
     }
 
@@ -84,15 +83,8 @@ class BusServiceTest {
 
     @Test
     void delete_mockitoCallRealMethod() {
-        try (MockedConstruction<BusRepository> busRepositoryMockedConstruction =
-                     mockConstruction(BusRepository.class,
-                             (mock, context) ->
-                                     doCallRealMethod()
-                                             .when(mock).delete(anyString()))) {
-            assertFalse(target.delete(any()));
-        } catch (Throwable e) {
-            fail();
-        }
+        when(busRepository.delete(anyString())).thenCallRealMethod();
+        assertFalse(target.delete(anyString()));
     }
 
     @Test
@@ -103,8 +95,23 @@ class BusServiceTest {
     }
 
     @Test
-    void getRandomManufacturer_mustBeReturnManufacturer() {
-        target.getRandomManufacturer();
-        assertEquals(Manufacturer.class, target.getRandomManufacturer().getClass());
+    void getModelValueById_mustBeReturnModelIfIdExist() {
+        when(busRepository.findById(anyString()))
+                .thenReturn(Optional.of(bus));
+        assertEquals("model", target.getModelValueById("id"));
+    }
+
+    @Test
+    void getManufacturerValueById_mustBeReturnManufacturerIfIdExist() {
+        when(busRepository.findById(anyString()))
+                .thenReturn(Optional.of(bus));
+        assertEquals("KIA", target.getManufacturerValueById("id"));
+    }
+
+    @Test
+    void getPriceValueById_mustBeReturnPriceIfIdExist() {
+        when(busRepository.findById(anyString()))
+                .thenReturn(Optional.of(bus));
+        assertEquals("321", target.getPriceValueById("id"));
     }
 }

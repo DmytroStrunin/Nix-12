@@ -1,20 +1,18 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
 import com.nixsolutions.repository.TruckRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,13 +64,23 @@ class TruckServiceTest {
     }
 
     @Test
-    void getRandomManufacturer_mustBeCallManufacturerMethod() {
-        try (MockedStatic<Manufacturer> mockedStatic = mockStatic(Manufacturer.class)) {
-            when(Manufacturer.values()).thenCallRealMethod();
-            target.getRandomManufacturer();
-            mockedStatic.verify(Manufacturer::values);
-        } catch (Throwable e) {
-            fail();
-        }
+    void getModelValueById_mustBeReturnDefaultValueIfIdDontExist() {
+        when(truckRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
+        assertEquals("NONE", target.getModelValueById("id"));
+    }
+
+    @Test
+    void getManufacturerValueById_mustBeReturnDefaultValueIfIdDontExist() {
+        when(truckRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
+        assertEquals("NONE", target.getManufacturerValueById("id"));
+    }
+
+    @Test
+    void getPriceValueById_mustBeReturnDefaultValueIfIdDontExist() {
+        when(truckRepository.findById(anyString()))
+                .thenReturn(Optional.empty());
+        assertEquals("-1", target.getPriceValueById("id"));
     }
 }

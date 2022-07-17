@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,8 +24,8 @@ class BusRepositoryTest {
     }
 
     @Test
-    void getById_mustBeReturnBusWithId() {
-        assertEquals(bus, target.findById(bus.getId()));
+    void findById_mustBeReturnBusWithId() {
+        assertEquals(Optional.of(bus), target.findById(bus.getId()));
     }
 
     @Test
@@ -34,6 +36,16 @@ class BusRepositoryTest {
     @Test
     void save_MustBeReturnFalseIfRepositoryContains() {
         assertFalse(target.save(bus));
+    }
+
+    @Test
+    void save_MustBeReturnTrueIfRepositoryDontContains() {
+        assertTrue(target.save(new Bus(null,null,null,0)));
+    }
+
+    @Test
+    void save_MustBeThrowExceptionIfArgumentNull() {
+        assertThrows(NoSuchElementException.class, ()->target.save(null));
     }
 
     @Test

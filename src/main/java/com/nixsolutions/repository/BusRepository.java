@@ -19,6 +19,7 @@ public class BusRepository implements CrudRepository<Bus> {
         buses = new LinkedList<>();
     }
 
+    //filter
     @Override
     public Optional<Bus> findById(String id) {
         Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
@@ -32,31 +33,27 @@ public class BusRepository implements CrudRepository<Bus> {
         return buses;
     }
 
+    //ifPresent
+    //orElseThrow
     @Override
     public boolean save(Bus bus) {
-        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
-        Optional<Bus> bus1 = Optional.ofNullable(bus).orElseGet(());
-        if (bus1.isPresent()){
-            bus1.filter(vehicle-> findById(vehicle.getId()).isEmpty()).ifPresent(buses::add);
+        Optional<Bus> optionalBus = Optional.ofNullable(bus);
+        if (findById(optionalBus.orElseThrow().getId()).isEmpty()){
+            optionalBus.filter(vehicle-> findById(vehicle.getId()).isEmpty())
+                    .ifPresent(buses::add);
+            return true;
         }
-
-        return buses.add(bus);
+        return false;
     }
 
-    public boolean save1(Bus bus) {
-        Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
-        if (findById(bus.getId()).isPresent()){
-            return false;
-        }
-        return buses.add(bus);
-    }
-
+    //orElseThrow
     @Override
     public boolean saveAll(List<Bus> buses) {
         Optional.ofNullable(buses).orElseThrow(()-> new IllegalArgumentException("buses is null"));
         return this.buses.addAll(buses);
     }
 
+    //orElseThrow
     @Override
     public boolean update(Bus bus) {
         Optional.ofNullable(bus).orElseThrow(()-> new IllegalArgumentException("bus is null"));
@@ -76,13 +73,15 @@ public class BusRepository implements CrudRepository<Bus> {
         return false;
     }
 
+    //ifPresentOrElse
     @Override
     public void copy(final Bus from, final Bus to) {
-        if (from != null && to != null) {
-            to.setManufacturer(from.getManufacturer());
-            to.setModel(from.getModel());
-            to.setNumberOfPassengers(from.getNumberOfPassengers());
-            to.setPrice(from.getPrice());
-        }
+        Bus busTo = Optional.ofNullable(to).orElseThrow(()-> new IllegalArgumentException("argument bus to is null"));
+        Optional.ofNullable(from).ifPresentOrElse(busFrom -> {
+            busTo.setManufacturer(busFrom.getManufacturer());
+            busTo.setModel(busFrom.getModel());
+            busTo.setNumberOfPassengers(busFrom.getNumberOfPassengers());
+            busTo.setPrice(busFrom.getPrice());
+        },()-> {throw new IllegalArgumentException("argument bus from is null");});
     }
 }

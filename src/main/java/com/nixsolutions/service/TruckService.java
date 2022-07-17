@@ -2,15 +2,16 @@ package com.nixsolutions.service;
 
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
+import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.repository.CrudRepository;
 import com.nixsolutions.repository.TruckRepository;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class TruckService {
@@ -33,7 +34,7 @@ public class TruckService {
                     getRandomTransportedWeight()
             );
             result.add(truck);
-            LOGGER.debug("Created truck {}", truck.getId());
+            LOGGER.debug("Created vehicle {}", truck.getId());
         }
         return result;
     }
@@ -52,22 +53,52 @@ public class TruckService {
         }
     }
 
-    public boolean update(@NonNull Truck truck) {
-        LOGGER.debug("Update auto {}", truck.getId());
+    //orElseThrow
+    public boolean update(Truck truck) {
+        Optional.ofNullable(truck).orElseThrow(()-> new IllegalArgumentException("vehicle is null"));
+        LOGGER.debug("Update vehicle {}", truck.getId());
         return truckRepository.update(truck);
     }
 
+    //orElseThrow
     public boolean delete(String id) {
+        Optional.ofNullable(id).orElseThrow(()-> new IllegalArgumentException("id is null"));
         if (truckRepository.delete(id)) {
-            LOGGER.debug("Remove truck {}", id);
+            LOGGER.debug("Remove vehicle {}", id);
             return true;
         }
         return false;
     }
 
-    protected Manufacturer getRandomManufacturer() {
+    private Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
         final int index = RANDOM.nextInt(values.length);
         return values[index];
+    }
+
+    //map
+    //or
+    public String getModelValueById(String id) {
+        return truckRepository.findById(id)
+                .map(Vehicle::getModel)
+                .or(()-> Optional.of("NONE")).get();
+    }
+
+    //map
+    //orElse
+    public String getManufacturerValueById(String id) {
+        return truckRepository.findById(id)
+                .map(Vehicle::getManufacturer)
+                .map(String::valueOf)
+                .orElse("NONE");
+    }
+
+    //map
+    //orElseGet
+    public String getPriceValueById(String id) {
+        return truckRepository.findById(id)
+                .map(Vehicle::getPrice)
+                .map(String::valueOf)
+                .orElseGet(()->String.valueOf(new BigDecimal(-1)));
     }
 }
