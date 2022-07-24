@@ -15,6 +15,8 @@ public abstract class Vehicle {
     protected BigDecimal price;
     protected Manufacturer manufacturer;
 
+    public abstract int getCount();
+
     protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price) {
         this.id = UUID.randomUUID().toString();
         this.model = model;

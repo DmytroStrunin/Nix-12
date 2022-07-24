@@ -4,6 +4,8 @@ import com.nixsolutions.model.Vehicle;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -22,7 +24,7 @@ public class Garage<T extends Vehicle> implements Iterable<T> {
         private Node prev;
         private Node next;
         private final int restylingNumber;
-        private final LocalDateTime date;
+        private LocalDateTime date;
 
         @Override
         public String toString() {
@@ -50,7 +52,7 @@ public class Garage<T extends Vehicle> implements Iterable<T> {
         size++;
     }
 
-    private Node search(int restylingNumber) {
+    private Node searchNodeByRestylingNumber(int restylingNumber) {
         Node tmp = head;
         while (tmp != null) {
             if (tmp.restylingNumber == restylingNumber) {
@@ -61,12 +63,34 @@ public class Garage<T extends Vehicle> implements Iterable<T> {
         throw new IllegalArgumentException();
     }
 
+    private int searchRestylingNumberByVehicle(T t) {
+        Node tmp = head;
+        while (tmp != null) {
+            if (t.equals(tmp.data)) {
+                return tmp.restylingNumber;
+            }
+            tmp = tmp.next;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private LocalDateTime searchDateByVehicle(T t) {
+        Node tmp = head;
+        while (tmp != null) {
+            if (t.equals(tmp.data)) {
+                return tmp.date;
+            }
+            tmp = tmp.next;
+        }
+        throw new IllegalArgumentException();
+    }
+
     public T getByRestylingNumber(int restylingNumber) {
-        return search(restylingNumber).data;
+        return searchNodeByRestylingNumber(restylingNumber).data;
     }
 
     public T removeByRestylingNumber(int restylingNumber) {
-        Node tmp = search(restylingNumber);
+        Node tmp = searchNodeByRestylingNumber(restylingNumber);
         if (tmp.prev == null) {
             head = tmp.next;
         } else {
@@ -80,7 +104,7 @@ public class Garage<T extends Vehicle> implements Iterable<T> {
     }
 
     public T setByRestylingNumber(int restylingNumber, T vehicle) {
-        return search(restylingNumber).data = vehicle;
+        return searchNodeByRestylingNumber(restylingNumber).data = vehicle;
     }
 
     public int getAmountRestylingNumbers() {
@@ -109,6 +133,29 @@ public class Garage<T extends Vehicle> implements Iterable<T> {
             tmp = tmp.next;
         }
         return localDateTime.format(DateTimeFormatter.ofPattern("d.MM.yyyy H:mm"));
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void sort(Comparator<? super T> c) {
+        Object[] array = this.toArray();
+        Arrays.sort(array, (Comparator) c.reversed());
+        Garage<T> tmp = new Garage<>();
+        int restylingNumberTmp;
+        for (Object e : array) {
+            restylingNumberTmp = searchRestylingNumberByVehicle((T) e);
+            tmp.add((T) e, restylingNumberTmp);
+            tmp.searchNodeByRestylingNumber(restylingNumberTmp).date = searchDateByVehicle((T) e);
+        }
+        head = tmp.head;
+    }
+
+    private Object[] toArray() {
+        Iterator<T> iterator = this.iterator();
+        Object[] array = new Object[size];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = iterator.next();
+        }
+        return array;
     }
 
     @Override
