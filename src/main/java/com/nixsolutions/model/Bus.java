@@ -17,21 +17,30 @@ import java.util.StringJoiner;
 @Setter
 public class Bus extends Vehicle {
     private int numberOfPassengers;
+    private static int count;
 
     public Bus(String model, Manufacturer manufacturer, BigDecimal price, int numberOfPassengers) {
         super(model, manufacturer, price);
         this.numberOfPassengers = numberOfPassengers;
+        count++;
     }
 
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(id)
-                .add(price.toString())
-                .add(model)
-                .add(manufacturer.toString())
-                .add(String.valueOf(numberOfPassengers))
+//                .add(id)
+                .add("price: " + price.toString())
+//                .add(model)
+                .add("name: " + manufacturer.toString())
+//                .add(String.valueOf(numberOfPassengers))
+                .add("count: " + count)
+                .add(this.getClass().getSimpleName())
                 .toString();
+    }
+
+    @Override
+    public int getCount() {
+        return count;
     }
 
     @Override
