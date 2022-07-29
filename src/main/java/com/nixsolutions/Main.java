@@ -6,6 +6,7 @@ import com.nixsolutions.model.Bus;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Truck;
 import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.utils.BinaryTree;
 import com.nixsolutions.utils.Garage;
 
 import java.math.BigDecimal;
@@ -43,25 +44,38 @@ public class Main {
                 .thenComparing(Vehicle::getManufacturer)
                 .thenComparingInt(Vehicle::getCount);
 
-        Garage<Vehicle> garage = new Garage<>();
-        garage.add(new Auto("model",Manufacturer.KIA,new BigDecimal(3), Body.COUPE), 1);
-        garage.add(new Auto("model",Manufacturer.BMW,new BigDecimal(2), Body.COUPE), 2);
-        garage.add(new Auto("model",Manufacturer.BMW,new BigDecimal(7), Body.COUPE), 3);
-        garage.add(new Bus("model",Manufacturer.ZAZ,new BigDecimal(5), 0), 4);
-        garage.add(new Bus("model",Manufacturer.KIA,new BigDecimal(8), 0), 5);
-        garage.add(new Truck("model",Manufacturer.ZAZ,new BigDecimal(5), 0), 6);
-        garage.add(new Truck("model",Manufacturer.BMW,new BigDecimal(8), 0), 7);
-        garage.add(new Truck("model",Manufacturer.BMW,new BigDecimal(3), 0), 8);
-        garage.add(new Truck("model",Manufacturer.ZAZ,new BigDecimal(2), 0),9);
+//        Garage<Vehicle> garage = new Garage<>();
+//        garage.add(new Auto("model",Manufacturer.KIA,new BigDecimal(3), Body.COUPE), 1);
+//        garage.add(new Auto("model",Manufacturer.BMW,new BigDecimal(2), Body.COUPE), 2);
+//        garage.add(new Auto("model",Manufacturer.BMW,new BigDecimal(7), Body.COUPE), 3);
+//        garage.add(new Bus("model",Manufacturer.ZAZ,new BigDecimal(5), 0), 4);
+//        garage.add(new Bus("model",Manufacturer.KIA,new BigDecimal(8), 0), 5);
+//        garage.add(new Truck("model",Manufacturer.ZAZ,new BigDecimal(5), 0), 6);
+//        garage.add(new Truck("model",Manufacturer.BMW,new BigDecimal(8), 0), 7);
+//        garage.add(new Truck("model",Manufacturer.BMW,new BigDecimal(3), 0), 8);
+//        garage.add(new Truck("model",Manufacturer.ZAZ,new BigDecimal(2), 0),9);
+//
+//        System.out.println("***before sort***");
+//        garage.forEach(System.out::println);
+//
+//        garage.sort(comparator);
+//        System.out.println("***after sort***");
+//
+//        for (Vehicle vehicle : garage) {
+//            System.out.println(vehicle);
+//        }
 
-        System.out.println("***before sort***");
-        garage.forEach(System.out::println);
+        BinaryTree<Vehicle> binaryTree = new BinaryTree<>(comparator);
+        binaryTree.add(new Auto("model 1",Manufacturer.KIA,new BigDecimal(3), Body.COUPE));
+        binaryTree.add(new Auto("model 2",Manufacturer.BMW,new BigDecimal(2), Body.COUPE));
+        binaryTree.add(new Auto("model 3",Manufacturer.BMW,new BigDecimal(7), Body.COUPE));
+        binaryTree.add(new Bus("model 4",Manufacturer.ZAZ,new BigDecimal(5), 0));
+        binaryTree.add(new Bus("model 5",Manufacturer.KIA,new BigDecimal(8), 0));
+        binaryTree.add(new Truck("model 6",Manufacturer.ZAZ,new BigDecimal(5), 0));
+        binaryTree.add(new Truck("model 7",Manufacturer.BMW,new BigDecimal(8), 0));
+        binaryTree.add(new Truck("model 8",Manufacturer.BMW,new BigDecimal(3), 0));
+        binaryTree.add(new Truck("model 9",Manufacturer.ZAZ,new BigDecimal(2), 0));
 
-        garage.sort(comparator);
-        System.out.println("***after sort***");
-
-        for (Vehicle vehicle : garage) {
-            System.out.println(vehicle);
-        }
+        binaryTree.printTree();
     }
 }
