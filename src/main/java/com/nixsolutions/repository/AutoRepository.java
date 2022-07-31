@@ -1,6 +1,5 @@
 package com.nixsolutions.repository;
 
-
 import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Body;
 
@@ -11,10 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class AutoRepository implements CrudRepository<Auto> {
+    private static AutoRepository instance;
     private final List<Auto> autos;
 
-    public AutoRepository() {
+    private AutoRepository() {
         autos = new LinkedList<>();
+    }
+
+    public static AutoRepository getInstance() {
+        if (instance == null) {
+            instance=new AutoRepository();
+        }
+        return instance;
     }
 
     @Override
@@ -25,6 +32,11 @@ public class AutoRepository implements CrudRepository<Auto> {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Auto> findAll() {
+        return autos;
     }
 
     @Override
@@ -63,6 +75,11 @@ public class AutoRepository implements CrudRepository<Auto> {
     }
 
     @Override
+    public Auto update(int position) {
+        return autos.get(position);
+    }
+
+    @Override
     public boolean delete(String id) {
         final Iterator<Auto> iterator = autos.iterator();
         while (iterator.hasNext()) {
@@ -83,6 +100,13 @@ public class AutoRepository implements CrudRepository<Auto> {
         }
         return true;
     }
+
+    @Override
+    public boolean delete(int position) {
+        autos.remove(position);
+        return true;
+    }
+
 
     @Override
     public void copy(final Auto from, final Auto to) {

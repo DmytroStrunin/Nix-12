@@ -10,6 +10,8 @@ public interface CrudRepository<T extends Vehicle> {
 
     Optional<T> findById(String id);
 
+    List<T> findAll();
+
     List<T> getAll();
 
     boolean save(T t);
@@ -18,7 +20,11 @@ public interface CrudRepository<T extends Vehicle> {
 
     boolean update(T t);
 
+    T update(int position);
+
     boolean delete(String id);
+
+    boolean delete(int position);
 
     void copy(final T from, final T to);
 }

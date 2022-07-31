@@ -19,7 +19,7 @@ class TruckRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        target = new TruckRepository();
+        target = TruckRepository.getInstance();
         truck = new Truck("model", Manufacturer.KIA, BigDecimal.ZERO, 0);
         target.save(truck);
         nullTruck = new Truck(null, null, null, 0);
@@ -57,11 +57,11 @@ class TruckRepositoryTest {
 
     @Test
     void copy_throwExceptionIfFirstArgumentNull() {
-        assertThrows(IllegalArgumentException.class, ()->target.copy(truck, null));
+        assertThrows(IllegalArgumentException.class, () -> target.copy(truck, null));
     }
 
     @Test
     void copy_throwExceptionIfSecondArgumentNull() {
-        assertThrows(IllegalArgumentException.class, ()->target.copy(null, truck));
+        assertThrows(IllegalArgumentException.class, () -> target.copy(null, truck));
     }
 }

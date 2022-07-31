@@ -12,7 +12,7 @@ class BusServiceTest {
 
     @BeforeEach
     void setUp() {
-        target = new BusService(new BusRepository());
+        target = new BusService(BusRepository.getInstance());
     }
 
     @Test

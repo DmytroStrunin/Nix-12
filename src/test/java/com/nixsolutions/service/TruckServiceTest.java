@@ -1,6 +1,5 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.repository.TruckRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,7 @@ class TruckServiceTest {
 
     @BeforeEach
     void setUp() {
-        target = new TruckService(new TruckRepository());
+        target = TruckService.getInstance();
     }
 
     @Test

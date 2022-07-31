@@ -3,6 +3,7 @@ package com.nixsolutions.service;
 import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Body;
 import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.repository.AutoRepository;
 import com.nixsolutions.repository.CrudRepository;
 
 import java.math.BigDecimal;
@@ -11,17 +12,21 @@ import java.util.List;
 import java.util.Optional;
 
 public class AutoService extends VehicleService<Auto>{
+    private static AutoService instance;
 
     public AutoService(CrudRepository<Auto> repository) {
         super(repository);
     }
 
-    @Override
-    public List<Auto> create(int count) {
-        return null;
+    public static AutoService getInstance() {
+        if (instance == null) {
+            instance= new AutoService(AutoRepository.getInstance());
+        }
+        return instance;
     }
 
-    public List<Auto> createAndSaveAutos(int count) {
+    @Override
+    public List<Auto> create(int count) {
         List<Auto> result = new LinkedList<>();
         for (int i = 0; i < count; i++) {
             final Auto auto = new Auto(
@@ -32,7 +37,6 @@ public class AutoService extends VehicleService<Auto>{
 
             );
             result.add(auto);
-            repository.save(auto);
             LOGGER.debug("Created auto {}", auto.getId());
         }
         return result;
@@ -48,12 +52,8 @@ public class AutoService extends VehicleService<Auto>{
         return values[index];
     }
 
-    public Optional<Auto> findOneById(String id) {
-        return id == null ? repository.findById("") : repository.findById(id);
-    }
-
     public void optionalExmaples() {
-        final Auto auto = createAndSaveAutos(1).get(0);
+        final Auto auto = createAndSaveVehicles(1).get(0);
         final String id = auto.getId();
 
 //        simpleCheck(id);
