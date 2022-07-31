@@ -12,7 +12,6 @@ import com.nixsolutions.utils.BinaryTree;
 import com.nixsolutions.utils.UserInputUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

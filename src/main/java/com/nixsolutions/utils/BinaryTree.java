@@ -75,16 +75,16 @@ public class BinaryTree<T extends Vehicle> {
     }
 
     public void printTree() {
-        printTree1(root, null, false);
+        printTree(root, null, false);
     }
 
-    private void printTree1(Node root, Trunk prev, boolean isLeft) {
+    private void printTree(Node root, Trunk prev, boolean isLeft) {
         if (root == null) {
             return;
         }
         String prev_str = "    ";
         Trunk trunk = new Trunk(prev, prev_str);
-        printTree1(root.rightChild, trunk, true);
+        printTree(root.rightChild, trunk, true);
         if (prev == null) {
             trunk.str = "———";
         } else if (isLeft) {
@@ -100,7 +100,7 @@ public class BinaryTree<T extends Vehicle> {
             prev.str = prev_str;
         }
         trunk.str = "   |";
-        printTree1(root.leftChild, trunk, false);
+        printTree(root.leftChild, trunk, false);
     }
 
     private void showTrunks(Trunk p) {
