@@ -28,7 +28,8 @@ public class VehicleContainer<T extends Vehicle> {
     }
 
     public T setRandomDiscount(){
-        BigDecimal discount = t.getPrice().multiply(new BigDecimal(new Random().nextInt(10,30)).divide(new BigDecimal(100)));
+        BigDecimal discount = t.getPrice().multiply(new BigDecimal(new Random().nextInt(10,30))
+                .divide(new BigDecimal(100)));
         t.setPrice(t.getPrice().add(discount));
         return t;
     }

@@ -1,5 +1,6 @@
 package com.nixsolutions.service;
 
+import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.repository.CrudRepository;
@@ -29,8 +30,22 @@ public abstract class VehicleService<T extends Vehicle> {
 
     public abstract List<T> create(int count);
 
+    public List<T> createAndSaveVehicles(int count) {
+        List<T> result = create(count);
+        result.forEach(repository::save);
+        return result;
+    }
+
     public void save(List<T> trucks) {
         repository.saveAll(trucks);
+    }
+
+    public Optional<T> findOneById(String id) {
+        return id == null ? repository.findById("") : repository.findById(id);
+    }
+
+    public List<T> findAll() {
+        return repository.findAll();
     }
 
     public void printAll() {
@@ -45,6 +60,10 @@ public abstract class VehicleService<T extends Vehicle> {
         return repository.update(t);
     }
 
+    public T update(int position) {
+        return repository.update(position);
+    }
+
     public boolean delete(String id) {
         Optional.ofNullable(id).orElseThrow(() -> new IllegalArgumentException("id is null"));
         if (repository.delete(id)) {
@@ -53,6 +72,11 @@ public abstract class VehicleService<T extends Vehicle> {
         }
         return false;
     }
+
+    public boolean delete(int position) {
+        return repository.delete(position);
+    }
+
 
     protected Manufacturer getRandomManufacturer() {
         final Manufacturer[] values = Manufacturer.values();
@@ -79,4 +103,5 @@ public abstract class VehicleService<T extends Vehicle> {
                 .map(String::valueOf)
                 .orElseGet(() -> String.valueOf(new BigDecimal(-1)));
     }
+
 }

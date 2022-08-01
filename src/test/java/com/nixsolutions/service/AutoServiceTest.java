@@ -27,19 +27,19 @@ class AutoServiceTest {
 
     @Test
     void createAutos_negativeCount() {
-        final List<Auto> actual = target.createAndSaveAutos(-1);
+        final List<Auto> actual = target.createAndSaveVehicles(-1);
         Assertions.assertEquals(0, actual.size());
     }
 
     @Test
     void createAutos_zeroCount() {
-        final List<Auto> actual = target.createAndSaveAutos(0);
+        final List<Auto> actual = target.createAndSaveVehicles(0);
         Assertions.assertEquals(0, actual.size());
     }
 
     @Test
     void createAutos() {
-        final List<Auto> actual = target.createAndSaveAutos(5);
+        final List<Auto> actual = target.createAndSaveVehicles(5);
         Assertions.assertEquals(5, actual.size());
         Mockito.verify(autoRepository, Mockito.times(5))
                 .save(Mockito.any());

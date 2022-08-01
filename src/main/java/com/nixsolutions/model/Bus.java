@@ -29,12 +29,12 @@ public class Bus extends Vehicle {
     public String toString() {
         return new StringJoiner("\t")
 //                .add(id)
-                .add("price: " + price.toString())
-//                .add(model)
-                .add("name: " + manufacturer.toString())
+//                .add("price: " + price.toString())
+                .add(model)
+//                .add("name: " + manufacturer.toString())
 //                .add(String.valueOf(numberOfPassengers))
-                .add("count: " + count)
-                .add(this.getClass().getSimpleName())
+//                .add("count: " + count)
+//                .add(this.getClass().getSimpleName())
                 .toString();
     }
 

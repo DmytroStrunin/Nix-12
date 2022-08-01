@@ -5,6 +5,7 @@ import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,19 +17,19 @@ class VehicleContainerTest {
 
     @BeforeEach
     void setUp() {
-        vehicle= new Bus("model", Manufacturer.KIA, new BigDecimal(100), 10);
-        target=new VehicleContainer<>(vehicle);
+        vehicle = new Bus("model", Manufacturer.KIA, new BigDecimal(100), 10);
+        target = new VehicleContainer<>(vehicle);
     }
 
     @Test
     void constructor_mustBeThrowExceptionIfVehicleEqualsNull() {
-        assertThrows(IllegalArgumentException.class, ()-> target = new VehicleContainer<>(null) );
+        assertThrows(IllegalArgumentException.class, () -> target = new VehicleContainer<>(null));
     }
 
     @Test
     void constructor_mustBeThrowExceptionIfVehiclePriceEqualsNull() {
         assertThrows(IllegalArgumentException.class,
-                ()-> target = new VehicleContainer<>(new Bus("model", Manufacturer.KIA, null, 10)) );
+                () -> target = new VehicleContainer<>(new Bus("model", Manufacturer.KIA, null, 10)));
     }
 
     @Test
@@ -39,7 +40,7 @@ class VehicleContainerTest {
     @Test
     void setRandomDiscount_mustBeReturnRightDiscount() {
         int price = target.setRandomDiscount().getPrice().intValue();
-        assertTrue(price>=110 && price<=130);
+        assertTrue(price >= 110 && price <= 130);
     }
 
     @Test

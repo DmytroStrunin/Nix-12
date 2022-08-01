@@ -1,6 +1,7 @@
 package com.nixsolutions.service;
 
 import com.nixsolutions.model.Bus;
+import com.nixsolutions.repository.BusRepository;
 import com.nixsolutions.repository.CrudRepository;
 
 import java.math.BigDecimal;
@@ -9,8 +10,17 @@ import java.util.List;
 
 public class BusService extends VehicleService<Bus> {
 
+    private static BusService instance;
+
     public BusService(CrudRepository<Bus> repository) {
         super(repository);
+    }
+
+    public static BusService getInstance() {
+        if (instance == null) {
+            instance = new BusService(BusRepository.getInstance());
+        }
+        return instance;
     }
 
     @Override

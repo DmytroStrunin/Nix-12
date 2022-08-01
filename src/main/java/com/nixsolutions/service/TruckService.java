@@ -2,15 +2,24 @@ package com.nixsolutions.service;
 
 import com.nixsolutions.model.Truck;
 import com.nixsolutions.repository.CrudRepository;
+import com.nixsolutions.repository.TruckRepository;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TruckService extends VehicleService<Truck>{
+    public static TruckService instance;
 
-    public TruckService(CrudRepository<Truck> repository) {
+    private TruckService(CrudRepository<Truck> repository) {
         super(repository);
+    }
+
+    public static TruckService getInstance(){
+        if (instance == null) {
+            instance=new TruckService(TruckRepository.getInstance());
+        }
+        return instance;
     }
 
     @Override

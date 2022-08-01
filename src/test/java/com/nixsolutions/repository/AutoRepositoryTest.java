@@ -6,13 +6,17 @@ import com.nixsolutions.model.Body;
 import com.nixsolutions.model.Manufacturer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AutoRepositoryTest {
 
     private AutoRepository target;
@@ -21,7 +25,7 @@ class AutoRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        target = new AutoRepository();
+        target = AutoRepository.getInstance();
         auto = createSimpleAuto();
         target.save(auto);
     }
@@ -53,6 +57,7 @@ class AutoRepositoryTest {
         Assertions.assertNotEquals(otherAuto.getId(), actual.get().getId());
     }
 
+    @Order(1)
     @Test
     void getAll() {
         final List<Auto> actual = target.getAll();
