@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public abstract class Vehicle {
     protected String model;
     protected BigDecimal price;
     protected Manufacturer manufacturer;
+    protected List<String> details;
 
     public abstract int getCount();
 

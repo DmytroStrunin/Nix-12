@@ -1,6 +1,5 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Auto;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.repository.CrudRepository;
@@ -8,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * The {@code VehicleService} class
@@ -103,5 +105,46 @@ public abstract class VehicleService<T extends Vehicle> {
                 .map(String::valueOf)
                 .orElseGet(() -> String.valueOf(new BigDecimal(-1)));
     }
+
+    public void printMoreExpensiveCars(BigDecimal x) {
+        repository.getAll().stream()
+                .filter(vehicle -> x.compareTo(vehicle.getPrice()) > 0)
+                .map(Vehicle::getModel)
+                .forEach(System.out::println);
+    }
+
+    public int getSumVehicles() {
+        return repository.getAll().stream()
+                .map(Vehicle::getPrice)
+                .reduce(BigDecimal::add)
+                .map(BigDecimal::intValue)
+                .orElse(0);
+    }
+
+    public Map<String, String> repositoryToMap() {
+        return repository.getAll().stream()
+                .sorted(Comparator.comparing(Vehicle::getManufacturer)) //бесполезен, но в условии дз был :)
+                .distinct()
+                .collect(Collectors.toMap(Vehicle::getId, value->value.getClass().getName()));
+    }
+
+    public boolean checkDetailInAllVehicles(String detail) {
+        return repository.getAll().stream()
+                .map(Vehicle::getDetails)
+                .allMatch(details->details.contains(detail));
+    }
+
+//      - Получить статистику по цене всех машин
+    public void printVehiclePriceStatistics(BigDecimal x) { //fixme
+        repository.getAll().stream()
+                .filter(vehicle -> x.compareTo(vehicle.getPrice()) > 0)
+                .map(Vehicle::getModel)
+                .forEach(System.out::println);
+    }
+
+//      Написать реализацию предиката который проверяет что в переданной коллекции у всех машин есть цена.
+
+//      Написать реализацию Function которая принимает Map<String, Object> и создает конкретную машину на основании полей Map
+
 
 }
