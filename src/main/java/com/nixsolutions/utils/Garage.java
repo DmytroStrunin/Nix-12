@@ -1,6 +1,6 @@
 package com.nixsolutions.utils;
 
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Vehicle;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

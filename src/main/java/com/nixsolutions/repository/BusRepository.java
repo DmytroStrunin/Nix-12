@@ -1,8 +1,6 @@
 package com.nixsolutions.repository;
 
-import com.nixsolutions.model.Auto;
-import com.nixsolutions.model.Bus;
-import com.nixsolutions.service.BusService;
+import com.nixsolutions.model.vehicle.Bus;
 
 import java.util.LinkedList;
 import java.util.List;

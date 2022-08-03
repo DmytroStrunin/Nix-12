@@ -1,5 +1,6 @@
-package com.nixsolutions.model;
+package com.nixsolutions.model.vehicle;
 
+import com.nixsolutions.model.Manufacturer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,20 +9,20 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * The {@code Bus} class
+ * The {@code Truck} class
  *
  * @author Strunin Dmytro
  * @version 1.0
  */
 @Getter
 @Setter
-public class Bus extends Vehicle {
-    private int numberOfPassengers;
+public class Truck extends Vehicle {
+    private int transportedWeight;
     private static int count;
 
-    public Bus(String model, Manufacturer manufacturer, BigDecimal price, int numberOfPassengers) {
+    public Truck(String model, Manufacturer manufacturer, BigDecimal price, int transportedWeight) {
         super(model, manufacturer, price);
-        this.numberOfPassengers = numberOfPassengers;
+        this.transportedWeight = transportedWeight;
         count++;
     }
 
@@ -32,7 +33,7 @@ public class Bus extends Vehicle {
 //                .add("price: " + price.toString())
                 .add(model)
 //                .add("name: " + manufacturer.toString())
-//                .add(String.valueOf(numberOfPassengers))
+//                .add(String.valueOf(transportedWeight))
 //                .add("count: " + count)
 //                .add(this.getClass().getSimpleName())
                 .toString();
@@ -46,13 +47,13 @@ public class Bus extends Vehicle {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bus bus)) return false;
+        if (!(o instanceof Truck truck)) return false;
         if (!super.equals(o)) return false;
-        return getNumberOfPassengers() == bus.getNumberOfPassengers();
+        return getTransportedWeight() == truck.getTransportedWeight();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getNumberOfPassengers());
+        return Objects.hash(super.hashCode(), getTransportedWeight());
     }
 }

@@ -1,6 +1,6 @@
 package com.nixsolutions.command;
 
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Vehicle;
 import com.nixsolutions.model.VehicleType;
 import com.nixsolutions.service.AutoService;
 import com.nixsolutions.service.BusService;

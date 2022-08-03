@@ -1,6 +1,6 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Truck;
+import com.nixsolutions.model.vehicle.Truck;
 import com.nixsolutions.repository.CrudRepository;
 import com.nixsolutions.repository.TruckRepository;
 

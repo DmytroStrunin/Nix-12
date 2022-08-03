@@ -1,6 +1,6 @@
 package com.nixsolutions.repository;
 
-import com.nixsolutions.model.Bus;
+import com.nixsolutions.model.vehicle.Bus;
 import com.nixsolutions.model.Manufacturer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;

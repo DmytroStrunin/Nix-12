@@ -1,8 +1,8 @@
 package com.nixsolutions.utils;
 
-import com.nixsolutions.model.Bus;
+import com.nixsolutions.model.vehicle.Bus;
 import com.nixsolutions.model.Manufacturer;
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.vehicle.Auto;
 import com.nixsolutions.model.Body;
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Vehicle;
 import com.nixsolutions.repository.AutoRepository;
 import com.nixsolutions.repository.CrudRepository;
 

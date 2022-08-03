@@ -2,12 +2,12 @@ package com.nixsolutions;
 
 import com.nixsolutions.command.Action;
 import com.nixsolutions.command.Command;
-import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.vehicle.Auto;
 import com.nixsolutions.model.Body;
-import com.nixsolutions.model.Bus;
+import com.nixsolutions.model.vehicle.Bus;
 import com.nixsolutions.model.Manufacturer;
-import com.nixsolutions.model.Truck;
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Truck;
+import com.nixsolutions.model.vehicle.Vehicle;
 import com.nixsolutions.utils.BinaryTree;
 import com.nixsolutions.utils.UserInputUtil;
 

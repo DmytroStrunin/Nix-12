@@ -1,6 +1,6 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Bus;
+import com.nixsolutions.model.vehicle.Bus;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.repository.BusRepository;
 import org.junit.jupiter.api.Assertions;

@@ -1,15 +1,14 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.vehicle.Auto;
 import com.nixsolutions.model.Body;
 import com.nixsolutions.model.Manufacturer;
-import com.nixsolutions.model.Vehicle;
+import com.nixsolutions.model.vehicle.Vehicle;
 import com.nixsolutions.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -130,7 +129,6 @@ public abstract class VehicleService<T extends Vehicle> {
 
     public Map<String, String> repositoryToMap() {
         return repository.getAll().stream()
-                .sorted(Comparator.comparing(Vehicle::getManufacturer)) //бесполезен, но в условии дз был :)
                 .distinct()
                 .collect(Collectors.toMap(Vehicle::getId, value -> value.getClass().getName()));
     }
@@ -153,15 +151,5 @@ public abstract class VehicleService<T extends Vehicle> {
         Predicate<Vehicle> predicate = vehicle -> Objects.nonNull(vehicle.getPrice());
         return repository.getAll().stream()
                 .allMatch(predicate);
-    }
-
-    public List<Vehicle> vehiclesCreate(List<Map<String, Object>> list) {
-        Function<Map<String, Object>, Vehicle> function = map -> new Auto(
-                (String) map.get("model")
-                , (Manufacturer) map.get("manufacturer")
-                , (BigDecimal) map.get("price")
-                , (Body) map.get("body")
-        );
-        return list.stream().map(function).toList();
     }
 }

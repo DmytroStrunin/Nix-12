@@ -1,6 +1,6 @@
 package com.nixsolutions.repository;
 
-import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.vehicle.Auto;
 import com.nixsolutions.model.Body;
 
 import java.math.BigDecimal;
