@@ -1,6 +1,6 @@
 package com.nixsolutions.service;
 
-import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.vehicle.Auto;
 import com.nixsolutions.model.Body;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.repository.AutoRepository;

@@ -1,5 +1,6 @@
-package com.nixsolutions.model;
+package com.nixsolutions.model.vehicle;
 
+import com.nixsolutions.model.Manufacturer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,20 +9,20 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * The {@code Truck} class
+ * The {@code Bus} class
  *
  * @author Strunin Dmytro
  * @version 1.0
  */
 @Getter
 @Setter
-public class Truck extends Vehicle {
-    private int transportedWeight;
+public class Bus extends Vehicle {
+    private int numberOfPassengers;
     private static int count;
 
-    public Truck(String model, Manufacturer manufacturer, BigDecimal price, int transportedWeight) {
+    public Bus(String model, Manufacturer manufacturer, BigDecimal price, int numberOfPassengers) {
         super(model, manufacturer, price);
-        this.transportedWeight = transportedWeight;
+        this.numberOfPassengers = numberOfPassengers;
         count++;
     }
 
@@ -32,7 +33,7 @@ public class Truck extends Vehicle {
 //                .add("price: " + price.toString())
                 .add(model)
 //                .add("name: " + manufacturer.toString())
-//                .add(String.valueOf(transportedWeight))
+//                .add(String.valueOf(numberOfPassengers))
 //                .add("count: " + count)
 //                .add(this.getClass().getSimpleName())
                 .toString();
@@ -46,13 +47,13 @@ public class Truck extends Vehicle {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Truck truck)) return false;
+        if (!(o instanceof Bus bus)) return false;
         if (!super.equals(o)) return false;
-        return getTransportedWeight() == truck.getTransportedWeight();
+        return getNumberOfPassengers() == bus.getNumberOfPassengers();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getTransportedWeight());
+        return Objects.hash(super.hashCode(), getNumberOfPassengers());
     }
 }

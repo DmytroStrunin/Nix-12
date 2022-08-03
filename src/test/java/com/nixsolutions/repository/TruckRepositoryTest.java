@@ -1,7 +1,7 @@
 package com.nixsolutions.repository;
 
 import com.nixsolutions.model.Manufacturer;
-import com.nixsolutions.model.Truck;
+import com.nixsolutions.model.vehicle.Truck;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

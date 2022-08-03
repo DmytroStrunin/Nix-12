@@ -1,5 +1,7 @@
-package com.nixsolutions.model;
+package com.nixsolutions.model.vehicle;
 
+import com.nixsolutions.model.Body;
+import com.nixsolutions.model.Manufacturer;
 import lombok.Getter;
 import lombok.Setter;
 

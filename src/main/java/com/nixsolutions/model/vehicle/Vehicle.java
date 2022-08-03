@@ -1,9 +1,12 @@
-package com.nixsolutions.model;
+package com.nixsolutions.model.vehicle;
 
+import com.nixsolutions.model.Manufacturer;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,8 +15,12 @@ import java.util.UUID;
 public abstract class Vehicle {
     protected final String id;
     protected String model;
-    protected BigDecimal price;
     protected Manufacturer manufacturer;
+    protected BigDecimal price;
+    protected String currency;
+    protected LocalDateTime created;
+    protected Engine engine;
+    protected List<String> details;
 
     public abstract int getCount();
 
@@ -34,5 +41,12 @@ public abstract class Vehicle {
     @Override
     public int hashCode() {
         return Objects.hash(getModel(), getPrice(), getManufacturer());
+    }
+
+    @Getter
+    @Setter
+    public static class Engine{
+        int volume;
+        String brandt;
     }
 }
