@@ -1,6 +1,7 @@
 package com.nixsolutions.service;
 
 import com.nixsolutions.model.Auto;
+import com.nixsolutions.model.Body;
 import com.nixsolutions.model.Manufacturer;
 import com.nixsolutions.model.Vehicle;
 import com.nixsolutions.repository.CrudRepository;
@@ -8,9 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * The {@code VehicleService} class
@@ -104,4 +113,55 @@ public abstract class VehicleService<T extends Vehicle> {
                 .orElseGet(() -> String.valueOf(new BigDecimal(-1)));
     }
 
+    public void printMoreExpensiveCars(BigDecimal x) {
+        repository.getAll().stream()
+                .filter(vehicle -> x.compareTo(vehicle.getPrice()) > 0)
+                .map(Vehicle::getModel)
+                .forEach(System.out::println);
+    }
+
+    public int getSumVehicles() {
+        return repository.getAll().stream()
+                .map(Vehicle::getPrice)
+                .reduce(BigDecimal::add)
+                .map(BigDecimal::intValue)
+                .orElse(0);
+    }
+
+    public Map<String, String> repositoryToMap() {
+        return repository.getAll().stream()
+                .sorted(Comparator.comparing(Vehicle::getManufacturer)) //бесполезен, но в условии дз был :)
+                .distinct()
+                .collect(Collectors.toMap(Vehicle::getId, value -> value.getClass().getName()));
+    }
+
+    public boolean checkDetailInAllVehicles(String detail) {
+        return repository.getAll().stream()
+                .map(Vehicle::getDetails)
+                .allMatch(details -> details.contains(detail));
+    }
+
+    public void printVehiclePriceStatistics(BigDecimal x) {
+        final DoubleSummaryStatistics statistics = repository.getAll().stream()
+                .map(Vehicle::getPrice)
+                .mapToDouble(BigDecimal::doubleValue)
+                .summaryStatistics();
+        System.out.println(statistics);
+    }
+
+    public boolean checkPriceInAllVehicles(CrudRepository<Vehicle> repository) {
+        Predicate<Vehicle> predicate = vehicle -> Objects.nonNull(vehicle.getPrice());
+        return repository.getAll().stream()
+                .allMatch(predicate);
+    }
+
+    public List<Vehicle> vehiclesCreate(List<Map<String, Object>> list) {
+        Function<Map<String, Object>, Vehicle> function = map -> new Auto(
+                (String) map.get("model")
+                , (Manufacturer) map.get("manufacturer")
+                , (BigDecimal) map.get("price")
+                , (Body) map.get("body")
+        );
+        return list.stream().map(function).toList();
+    }
 }
